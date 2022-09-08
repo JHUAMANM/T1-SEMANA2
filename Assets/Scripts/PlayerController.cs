@@ -9,7 +9,9 @@ public class PlayerController : MonoBehaviour
     public int saltosHechos;
     public int limiteSaltos = 2;
     bool puedeSaltar = true;
+    public GameObject bullet;
     private Vector3 lastCheckpointPosition; 
+    private GameManagerController gameManager;
 
     Rigidbody2D rb;
     SpriteRenderer sr;
@@ -19,10 +21,11 @@ public class PlayerController : MonoBehaviour
     const int animacion_caminar = 2;
     const int animacion_atacar = 3;
     const int animacion_saltar = 4;
-    
+    private int bandera = 0;
     void Start()
     {
         Debug.Log("Iniciando partida de juego");
+        gameManager = FindObjectOfType<GameManagerController>();
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
@@ -32,8 +35,23 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        rb.velocity = new Vector2(0, rb.velocity.y);
-            CambiarAnimacion(animacion_estatico);
+        rb.velocity = new Vector2(3, rb.velocity.y);
+            CambiarAnimacion(animacion_correr);
+        
+        if(Input.GetKeyUp(KeyCode.D) && sr.flipX == true){
+            var bulletPosition = transform.position + new Vector3(-3, 0, 0);
+            var gb = Instantiate(bullet, bulletPosition, Quaternion.identity) as GameObject; 
+            var controller = gb.GetComponent<BulletController>();
+            controller.SetLeftDirection();  
+            
+        }
+        if(Input.GetKeyUp(KeyCode.D) && sr.flipX == false){
+            var bulletPosition = transform.position + new Vector3(3, 0, 0);
+            var gb = Instantiate(bullet, bulletPosition, Quaternion.identity) as GameObject; 
+            var controller = gb.GetComponent<BulletController>();
+            controller.SetRightDirection();  
+            
+        }
             
         if (Input.GetKey(KeyCode.RightArrow))
         {
@@ -73,6 +91,9 @@ public class PlayerController : MonoBehaviour
             }
             
         }
+        if(gameManager.livesText.text == "1"){
+            //CambiarAnimacion(an)
+        }
         if(Input.GetKey(KeyCode.Z)){
            CambiarAnimacion(animacion_atacar);
         }
@@ -87,6 +108,10 @@ public class PlayerController : MonoBehaviour
             if(lastCheckpointPosition != null){
                 transform.position = lastCheckpointPosition;
             }
+        }
+        if(objeto.gameObject.tag == "Enemy"){
+            rb.velocity = new Vector2(-1, rb.velocity.y);
+            gameManager.PerderVida();
         }     
     }
 
@@ -97,7 +122,14 @@ public class PlayerController : MonoBehaviour
       
     void OnTriggerEnter2D(Collider2D other) {
        Debug.Log("Trigger"); 
-       lastCheckpointPosition = transform.position;
+       if(other.gameObject.name == "Checkpoint1"){
+        bandera++;
+        lastCheckpointPosition = transform.position;
+       }
+       if(bandera <= 0){
+        lastCheckpointPosition = transform.position;
+       }
+       
     } 
 
 }
