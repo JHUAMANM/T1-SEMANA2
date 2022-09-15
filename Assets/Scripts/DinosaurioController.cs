@@ -18,9 +18,9 @@ public class DinosaurioController : MonoBehaviour
     const int ANIMATION_DEAD = 4;
     
 
-    bool puedeSaltar = true;
+    //bool puedeSaltar = true;
 
-    private int saltosHechos;
+    // private int saltosHechos;
     public int limiteSaltos = 2;
 
     private Vector3 lastCheckpointPosition;
@@ -98,7 +98,7 @@ public class DinosaurioController : MonoBehaviour
     
     void OnCollisionEnter2D(Collision2D other) {
         Debug.Log("Puede saltar");
-        puedeSaltar = true;
+        //puedeSaltar = true;
             if (other.gameObject.tag == "Enemy")
             {
                 Debug.Log("Estas muerto");
@@ -112,7 +112,7 @@ public class DinosaurioController : MonoBehaviour
             }
 
             if(other.collider.tag=="Tilemap"){
-            saltosHechos = 0;  
+            //saltosHechos = 0;  
         }
 
             

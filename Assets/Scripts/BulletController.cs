@@ -37,7 +37,10 @@ public class BulletController : MonoBehaviour
             if (other.gameObject.tag == "Enemy")
             {
                 Destroy(other.gameObject);
-                gameManager.GanarPuntos(1);
+                gameManager.GanarPuntos(10);
+                gameManager.SaveGame();
+                //gameManager.GanarMonedas(5);
+                //gameManager.PerderVida();
             }
               
     }

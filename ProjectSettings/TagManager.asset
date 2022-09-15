@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Checkpoint
   - Enemy
+  - Suelo
+  - Moneda
+  - Tilemap
   layers:
   - Default
   - TransparentFX

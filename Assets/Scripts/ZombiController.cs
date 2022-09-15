@@ -12,6 +12,8 @@ public class ZombiController : MonoBehaviour
     public GameObject bullet;
     private Vector3 lastCheckpointPosition; 
 
+    private GameManagerController gameManager;
+
     Rigidbody2D rb;
     SpriteRenderer sr;
     Animator animator;
@@ -20,10 +22,11 @@ public class ZombiController : MonoBehaviour
     const int animacion_caminar = 2;
     const int animacion_atacar = 3;
     const int animacion_dead = 4;
-    private int bandera = 0;
+    //private int bandera = 0;
     void Start()
     {
         Debug.Log("Iniciando partida de juego");
+        gameManager = FindObjectOfType<GameManagerController>();
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
@@ -33,9 +36,13 @@ public class ZombiController : MonoBehaviour
 
     void Update()
     {
-        rb.velocity = new Vector2(-6, rb.velocity.y);
+        
+        rb.velocity = new Vector2(-1, rb.velocity.y);
         CambiarAnimacion(animacion_caminar);
-                   
+        
+        rb.velocity = new Vector2(1, rb.velocity.y);
+        CambiarAnimacion(animacion_caminar);
+        /*           
         if (Input.GetKey(KeyCode.LeftArrow))
         {
             rb.velocity = new Vector2(velocity, rb.velocity.y);
@@ -90,13 +97,13 @@ public class ZombiController : MonoBehaviour
            CambiarAnimacion(animacion_dead);
             
         }    
-    }
+    }*/
 
     void CambiarAnimacion(int animacion)
     {
         animator.SetInteger("Estado", animacion);
     }
-      
+     /* 
     void OnTriggerEnter2D(Collider2D other) {
        Debug.Log("Trigger"); 
        if(other.gameObject.name == "Checkpoint1"){
@@ -105,6 +112,6 @@ public class ZombiController : MonoBehaviour
        }
        if(bandera <= 0){
         lastCheckpointPosition = transform.position;
-       }
+       }*/
     } 
 }
