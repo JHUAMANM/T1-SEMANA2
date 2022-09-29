@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class NinjaHombreController : MonoBehaviour
 {
@@ -28,15 +29,17 @@ public class NinjaHombreController : MonoBehaviour
     const int ANIMACION_MORIR = 4;
     const int ANIMACION_ATTACK = 12;
     const int ANIMACION_GLIDE = 13;
-    const int ANIMACION_SUBIR = 15;
+    const int ANIMACION_SUBIR = 14;
 
     private int bala = 0;
     bool escalera = false;
-    bool plataforma = false;
+    //bool plataforma = false;
     private Vector3 lastCheckpointPosition; 
     private GameManagerController gameManager;
-     private int bandera = 0;
-     public bool ClimbingAllowed { get; set; }
+    private int bandera = 0;
+    BoxCollider2D boxCollider2D;
+    //public GameObject plataforma;
+    public bool ClimbingAllowed { get; set; }
     
     void Start()
     {
@@ -47,10 +50,12 @@ public class NinjaHombreController : MonoBehaviour
         animator = GetComponent<Animator>();
         saltosHechos = 0;
         audioSource = GetComponent<AudioSource>();
+        boxCollider2D = GetComponent<BoxCollider2D>();
 
     }
     void Update()
     {
+        
         dirX = Input.GetAxisRaw("Horizontal") * velocity;
 
         if (ClimbingAllowed)
@@ -60,7 +65,7 @@ public class NinjaHombreController : MonoBehaviour
 
 
             //Para balear
-        if(Input.GetKeyUp(KeyCode.D) && sr.flipX == true && bala < 5){
+        if(Input.GetKeyUp(KeyCode.D) && sr.flipX == true && bala < 500){
             
             var bulletPosition = transform.position + new Vector3(-3, 0, 0);
             var gb = Instantiate(bullet, bulletPosition, Quaternion.identity) as GameObject; 
@@ -72,7 +77,7 @@ public class NinjaHombreController : MonoBehaviour
             bala++;
             
         }
-        if(Input.GetKeyUp(KeyCode.D) && sr.flipX == false && bala < 5){
+        if(Input.GetKeyUp(KeyCode.D) && sr.flipX == false && bala < 500){
             var bulletPosition = transform.position + new Vector3(3, 0, 0);
             var gb = Instantiate(bullet, bulletPosition, Quaternion.identity) as GameObject; 
             var controller = gb.GetComponent<BulletController>();
@@ -106,19 +111,22 @@ public class NinjaHombreController : MonoBehaviour
                 audioSource.PlayOneShot(jumpClip);
             }
         }
+
+        
         
         //Para subir -- CLIMB
         else if(Input.GetKey(KeyCode.UpArrow)){
             rb.velocity = new Vector2(rb.velocity.x, 10);
             CambiarAnimacion(ANIMACION_SUBIR);
-            plataforma = true;
+            //plataforma = true;
         }
         
         else if(Input.GetKey(KeyCode.DownArrow)){
             rb.velocity = new Vector2(rb.velocity.x, -10);
             CambiarAnimacion(ANIMACION_SUBIR);
-            plataforma = true;
+            //plataforma = true;
         }
+        
 
         //Para deslizarce ..SLIDE
         else if(Input.GetKey(KeyCode.Z)){
@@ -133,10 +141,19 @@ public class NinjaHombreController : MonoBehaviour
         else if(gameManager.livesText.text == "Fin de Juego"){
             rb.velocity = new Vector2(0, rb.velocity.y);
             CambiarAnimacion(ANIMACION_MORIR);
-        }        
+        }
+        /*
+        //Para subir y bajar la escalera
+        else if(boxCollider2D.IsTouchingLayers(LayerMask.GetMask("Escalera"))){
+           rb.gravityScale = 0;
+           rb.velocity = new Vector2(0, 0);
+           CambiarAnimacion(ANIMACION_SUBIR);
+           plataforma.GetComponent<BoxCollider2D>().enabled = false;
+        } */       
         
         else
         {
+            //rb.gravityScale = 1;
             rb.velocity = new Vector2(0, rb.velocity.y);
             CambiarAnimacion(ANIMACION_QUIETO);
         }
@@ -172,20 +189,17 @@ public class NinjaHombreController : MonoBehaviour
             escalera = true;
             escalera = true;
         }
-        if(other.gameObject.name == "Plataforma"){
-            plataforma = true;
-        }
-
+       
         //Para hacer grande el player
-        if (other.collider.name == "Crecer")
+        if (other.collider.tag == "Enemy")
         {
             transform.localScale = new Vector3(2,2,1);
             audioSource.PlayOneShot(jumpClip);
         }
         //Para regresar a su estado normal
-        if(other.gameObject.tag == "Enemy")
+        if(other.gameObject.tag == "Tilemap")
         {
-            transform.localScale = new Vector3(1,1,1);
+            transform.localScale = new Vector3(0.4571298f,0.4562687f,1);
             audioSource.PlayOneShot(collisionClip);
         }
         //Para morir
@@ -194,35 +208,49 @@ public class NinjaHombreController : MonoBehaviour
         }
         if(other.gameObject.tag == "Moneda"){
             Destroy(other.gameObject);
-            gameManager.GanarMonedas(10);            
+            gameManager.GanarMonedas(10);                      
             audioSource.PlayOneShot(recogerMonedas);
         } 
         if(other.gameObject.tag == "Moneda1"){
             Destroy(other.gameObject);            
-            gameManager.GanarMonedas1(20);            
+            gameManager.GanarMonedas1(20);                     
             audioSource.PlayOneShot(recogerMonedas);
         }            
         if(other.gameObject.tag == "Moneda2"){
             Destroy(other.gameObject);            
-            gameManager.GanarMonedas2(30);
+            gameManager.GanarMonedas2(30);            
             audioSource.PlayOneShot(recogerMonedas);
         }            
                    
         
     }
-     void OnTriggerEnter2D(Collider2D other) {
-       Debug.Log("Trigger"); 
-       if(other.gameObject.name == "Checkpoint1"){
-        bandera++;
+    /*
+    private void OnTriggerEnter2D(Collider2D other) {
+        Debug.Log("Trigger");
         lastCheckpointPosition = transform.position;
         gameManager.SaveGame();
+
+        
+    }*/
+    
+     void OnTriggerEnter2D(Collider2D other) {
+       Debug.Log("Trigger"); 
+       if(other.gameObject.name == "Checkpoint1"){       
+        lastCheckpointPosition = transform.position;        
+        gameManager.SaveGame();
+        bandera++;
+        
+        
        }
        if(bandera <= 0){
         lastCheckpointPosition = transform.position;
         gameManager.SaveGame();
+        SceneManager.LoadScene(GameManagerController.caballero);
        }
        
+       
     }  
+    
     private void FixedUpdate()
     {
         if (ClimbingAllowed)

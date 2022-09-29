@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CaballeroController : MonoBehaviour
 {
@@ -125,13 +126,15 @@ public class CaballeroController : MonoBehaviour
       
     void OnTriggerEnter2D(Collider2D other) {
        Debug.Log("Trigger"); 
-       if(other.gameObject.name == "Checkpoint2"){
+       if(other.gameObject.name == "Checkpoint1"){
         bandera++;
         lastCheckpointPosition = transform.position;
        }
        if(bandera <= 0){
         lastCheckpointPosition = transform.position;
        }
+
+       SceneManager.LoadScene(GameManagerController.goku);
        
     } 
 

@@ -7,7 +7,7 @@ public class BulletController : MonoBehaviour
     public float velocity = 20;
     Rigidbody2D rb;
     float realVelocity;
-    
+    public int impacto = 1;
     private GameManagerController gameManager;
 
    
@@ -18,6 +18,10 @@ public class BulletController : MonoBehaviour
         realVelocity = -velocity;
 
     }
+     public void Impacto(int imp){
+        impacto = imp;
+    }
+
     void Start()
     {
             gameManager = FindObjectOfType<GameManagerController>();
@@ -37,8 +41,9 @@ public class BulletController : MonoBehaviour
             if (other.gameObject.tag == "Enemy")
             {
                 Destroy(other.gameObject);
-                gameManager.GanarPuntos(10);
+                gameManager.GanarPuntos(1);
                 gameManager.SaveGame();
+                other.gameObject.GetComponent<EnemyControllerNHSem7>().Attacking(impacto);
                 //gameManager.GanarMonedas(5);
                 //gameManager.PerderVida();
             }

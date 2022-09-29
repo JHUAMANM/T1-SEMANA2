@@ -5,7 +5,28 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: Assets/Scenes/GokuScene.unity
+    guid: dbcdfa8c5a6b71b459aae5715842cf5d
+  - enabled: 0
+    path: "Assets/Scenes/Evaluaci\xF3nScene.unity"
+    guid: 7491b800747c4ae4facc6d6f391c8d8a
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
+    guid: 0353961ce583ce242b6df82da6c0053a
+  - enabled: 0
+    path: Assets/Scenes/CaballeroScene.unity
+    guid: 3c3da816543fb1b439e942c4712c87c9
+  - enabled: 1
+    path: Assets/Scenes/MenuPrinciipalScene.unity
+    guid: 3b898c85f38af4b439d04aff86a1f2a8
+  - enabled: 1
+    path: Assets/Scenes/NHSEM7Scene.unity
+    guid: 017e5499c96920f4983899b92038683c
+  - enabled: 1
+    path: Assets/Scenes/MenuScoreScene.unity
+    guid: cbc37d8fbc5b7bf4bac2838bd2de8a94
   m_configObjects: {}

@@ -8,6 +8,10 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public class GameManagerController : MonoBehaviour
 {
+    public const int goku = 0;
+    public const int evaluacion = 1;
+    public const int sample = 2;
+    public const int caballero = 3;
     public Text scoreText;
     public Text livesText;
     public Text balaText;
@@ -20,16 +24,28 @@ public class GameManagerController : MonoBehaviour
     private int monedas;
     private int monedas1;
     private int monedas2;
+    private float X;
+    private float Y;
+    private float Z;
     
     // Start is called before the first frame update
     void Start()
     {
         score = 0;
         lives = 3;
-        bala = 5;
+        bala = 100;
+        monedas = 0;
+        monedas1 = 0;
+        monedas2 = 0;
+        X = 0.0f;
+        Y = 0.0f;
+        Z = 0.0f;
         PrintScoreInScreen();
         PrintLivesInScreen();
         PrintBalaInScreen();
+        PrintMonedasInScreen();
+        PrintMonedas1InScreen();
+        PrintMonedas2InScreen();
         LoadGame();
     }
     public void SaveGame()
@@ -46,8 +62,11 @@ public class GameManagerController : MonoBehaviour
         GameData data =new GameData();
         data.Score = score;
         data.Coins = monedas;
-        data.Coins = monedas1;
-        data.Coins = monedas2;
+        data.Coins1 = monedas1;
+        data.Coins2 = monedas2;
+        data.X = X;
+        data.Y = Y;
+        data.Z = Z;
 
         BinaryFormatter bf =new BinaryFormatter();
         bf.Serialize(file, data);
@@ -77,6 +96,9 @@ public class GameManagerController : MonoBehaviour
         monedas = data.Coins;
         monedas1 = data.Coins1;
         monedas2 = data.Coins2;
+        data.X = X;
+        data.Y = Y;
+        data.Z = Z;
         PrintScoreInScreen();
         PrintMonedasInScreen();
         PrintMonedas1InScreen();
@@ -110,7 +132,7 @@ public class GameManagerController : MonoBehaviour
     }
     public void PerderVida(){
         lives -= 1;
-        //PrintLivesInScreen();
+        PrintLivesInScreen();
         if (lives == 2)
         {
             livesText.text = "Fin de Juego";
@@ -154,6 +176,28 @@ public class GameManagerController : MonoBehaviour
     }
     private void PrintMonedas2InScreen(){
        moneda2Text.text = "Monedas2: " + monedas2; 
+    }
+
+    public float PositionX()
+    {
+        return X;
+    }
+
+    public float PositionY()
+    {
+        return Y;
+    }
+
+    public float PositionZ()
+    {
+        return Z;
+    }
+
+    public void SetLastCheckPosition(float x, float y, float z)
+    {
+        X = x;
+        Y = y;
+        Z = z;
     }
 }
 

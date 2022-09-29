@@ -9,11 +9,16 @@ TagManager:
   - Suelo
   - Moneda
   - Tilemap
+  - Moneda1
+  - Moneda2
+  - LimiteIzquierdo
+  - LimiteDerecho
+  - Guardar
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Escalera
   - Water
   - UI
   - 

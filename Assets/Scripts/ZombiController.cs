@@ -5,10 +5,10 @@ using UnityEngine;
 public class ZombiController : MonoBehaviour
 {
     public float velocity = 10;
-    public float salto = 80;
-    public int saltosHechos;
-    public int limiteSaltos = 2;
-    bool puedeSaltar = true;
+    //public float salto = 80;
+    //public int saltosHechos;
+    //public int limiteSaltos = 2;
+    //bool puedeSaltar = true;
     public GameObject bullet;
     private Vector3 lastCheckpointPosition; 
 
@@ -17,11 +17,11 @@ public class ZombiController : MonoBehaviour
     Rigidbody2D rb;
     SpriteRenderer sr;
     Animator animator;
-    const int animacion_estatico = 0;
-    const int animacion_correr = 1;
-    const int animacion_caminar = 2;
-    const int animacion_atacar = 3;
-    const int animacion_dead = 4;
+    const int ANIMACION_QUIETO = 0;
+    const int ANIMACION_DEAD = 4;
+    const int ANIMACION_CAMINAR = 7;
+    const int ANIMACION_ATACAR = 12;
+    
     //private int bandera = 0;
     void Start()
     {
@@ -30,7 +30,7 @@ public class ZombiController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
-        saltosHechos = 0;
+        //saltosHechos = 0;
     }
 
 
@@ -38,10 +38,13 @@ public class ZombiController : MonoBehaviour
     {
         
         rb.velocity = new Vector2(-1, rb.velocity.y);
-        CambiarAnimacion(animacion_caminar);
+        sr.flipX = true;
+        CambiarAnimacion(ANIMACION_CAMINAR);
+
+       
         
-        rb.velocity = new Vector2(1, rb.velocity.y);
-        CambiarAnimacion(animacion_caminar);
+        // rb.velocity = new Vector2(1, rb.velocity.y);
+        // CambiarAnimacion(animacion_caminar);
         /*           
         if (Input.GetKey(KeyCode.LeftArrow))
         {
@@ -72,18 +75,19 @@ public class ZombiController : MonoBehaviour
                CambiarAnimacion(animacion_caminar);
             }                
             
-        }
+        }*/
         
         if(Input.GetKey(KeyCode.Z)){
-           CambiarAnimacion(animacion_atacar);
+           CambiarAnimacion(ANIMACION_ATACAR);
         }
 
         if(Input.GetKey(KeyCode.W)){
-           CambiarAnimacion(animacion_dead);
+           CambiarAnimacion(ANIMACION_DEAD);
         }
          
        
     }
+    /*
     void OnCollisionEnter2D(Collision2D objeto){
         if(objeto.collider.name=="Tilemap"){
           saltosHechos = 0;  
@@ -114,4 +118,4 @@ public class ZombiController : MonoBehaviour
         lastCheckpointPosition = transform.position;
        }*/
     } 
-}
+//}
